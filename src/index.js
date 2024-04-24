@@ -1,6 +1,9 @@
 const tgAPI = require("node-telegram-bot-api");
-const token = "7052666916:AAEP9YvzMIY12ourGCsBKYbd3OaRvvqZXmY";
-const bot = new tgAPI(token, { polling: true });
+const dotenv = require('dotenv');
+const {getWeather} = require('./api.js');
+dotenv.config();
+
+const bot = new tgAPI(process.env.TOKEN, { polling: true });
 
 bot.on("message", (msg) => {
   const text = msg.text;
@@ -24,13 +27,3 @@ bot.on("message", (msg) => {
       });
   }
 });
-
-function getWeather(city) {
-  return fetch(`https://wttr.in/${city}?lang=ru&format=3`).then((res) => {
-    if (res.ok) {
-      return res.text();
-    }
-
-    return `Похоже возникла ошибка на сервере либо вы допустили ошибку в названии города. Код ошибки: ${res.status}`;
-  });
-}
